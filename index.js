@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 // middleware
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 console.log(process.env.DB_USER);
 console.log(process.env.DB_PASSWORD);
@@ -33,7 +33,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const serviceCollection = client.db('foodService').collection('services')
-
+        const reviewCollection = client.db('foodService').collection('reviews')
         app.get('/services', async (req, res) => {
             const query = {}
             const cursor = serviceCollection.find(query)
@@ -77,6 +77,25 @@ async function run() {
             res.send(service)
 
 
+
+
+        });
+
+        // review api****
+
+        app.get('/myreviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+
+
+
+
+        });
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
 
 
         })
