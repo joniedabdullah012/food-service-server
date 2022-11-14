@@ -100,6 +100,15 @@ async function run() {
 
 
         });
+        app.get('/myreviews', async (req, res) => {
+            const query = {}
+            const cursor = reviewCollection.find(query)
+
+            const orders = await cursor.toArray();
+
+
+            res.send(orders)
+        });
 
         app.post('/reviews', async (req, res) => {
             const review = req.body;
@@ -108,6 +117,33 @@ async function run() {
 
 
         });
+
+        app.patch('/myreviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status
+            const query = { _id: ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    status: status
+                }
+
+
+            }
+            const result = await reviewCollection.updateOne(query, updatedDoc)
+            res.send(result)
+
+
+
+
+        })
+
+
+
+
+
+
+
+
 
         app.delete('/myreviews/:id', async (req, res) => {
             const id = req.params.id;
